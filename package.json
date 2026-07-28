@@ -1,0 +1,25 @@
+{
+	"name": "mern-todo-app",
+	"version": "1.0.0",
+	"description": "A simple full-stack **MERN Todo Application** built to learn CRUD operations and understand how a **Monorepo** works.",
+	"main": "index.js",
+	"scripts": {
+		"dev": "nodemon backend/server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ShankarDutta/mern-todo-app.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"type": "module",
+	"bugs": {
+		"url": "https://github.com/ShankarDutta/mern-todo-app/issues"
+	},
+	"homepage": "https://github.com/ShankarDutta/mern-todo-app#readme",
+	"dependencies": {
+		"express": "^5.2.1",
+		"nodemon": "^3.1.14"
+	}
+}
