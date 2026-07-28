@@ -1,3 +1,4 @@
+import cors from "cors";
 import { setServers } from "dns/promises";
 import dotenv from "dotenv";
 import express from "express";
@@ -15,6 +16,21 @@ if (process.env.NODE_ENV !== "production") {
 
 // declare port
 const port = process.env.PORT;
+
+// Parse incoming JSON requests (max payload: 10 MB)
+app.use(express.json({ limit: "10mb" }));
+
+// Parse URL-encoded form data (supports nested objects, max payload: 10 MB)
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Enable Cross-Origin Resource Sharing (CORS)
+// Allow requests only from the client application
+app.use(
+	cors({
+		origin: process.env.CLIENT_PORT,
+		credentials: true,
+	}),
+);
 
 // check server
 app.get("/", (req, res) => {
