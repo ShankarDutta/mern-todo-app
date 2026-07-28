@@ -1,10 +1,14 @@
+import dotenv from "dotenv";
 import express from "express";
+
+// configartion env
+dotenv.config();
 
 // initialization
 const app = express();
 
 // declare port
-const port = 4000;
+const port = process.env.PORT;
 
 // check server
 app.get("/", (req, res) => {
