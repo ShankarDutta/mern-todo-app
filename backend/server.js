@@ -28,7 +28,6 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(
 	cors({
 		origin: process.env.CLIENT_PORT,
-		credentials: true,
 	}),
 );
 
