@@ -1,14 +1,17 @@
 import { addTaskSchema } from "@/lib/zodSchema";
+import { createTask } from "@/services/tasks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Field, FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import { toast } from "../ui/toast";
 
 const AddTask = () => {
   const {
     handleSubmit,
     control,
+    reset,
     formState: { isSubmitting },
   } = useForm({
     resolver: zodResolver(addTaskSchema),
@@ -18,8 +21,26 @@ const AddTask = () => {
     mode: "all",
   });
 
-  const addTodo = (taskData) => {
-    console.log(taskData);
+  const addTodo = async (taskData) => {
+    try {
+      const res = await createTask(taskData);
+
+      if (res.success) {
+        toast.add({
+          type: "success",
+          description: res.message,
+        });
+
+        reset();
+      } else {
+        toast.add({
+          type: "error",
+          description: res.message,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to add task:", err);
+    }
   };
 
   return (

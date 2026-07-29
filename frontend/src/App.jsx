@@ -1,4 +1,4 @@
-import AddTask from "./components/Form/AddTask";
+import AddTask from "./components/Forms/AddTask";
 import {
   Card,
   CardContent,
