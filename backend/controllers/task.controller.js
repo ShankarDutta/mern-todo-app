@@ -51,6 +51,8 @@ const addTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
 	try {
+		const { text, completed } = req.body ?? {};
+
 		const task = await Task.findById(req.params.id);
 
 		if (!task) {
@@ -60,29 +62,26 @@ const updateTask = async (req, res) => {
 			});
 		}
 
-		if (req.body.text !== undefined) {
-			if (
-				typeof req.body.text !== "string" ||
-				req.body.text.trim() === ""
-			) {
+		if (text !== undefined) {
+			if (typeof text !== "string" || text.trim() === "") {
 				return res.status(400).json({
 					success: false,
 					message: "Task text is required",
 				});
 			}
 
-			task.text = req.body.text.trim();
+			task.text = text.trim();
 		}
 
-		if (req.body.completed !== undefined) {
-			if (typeof req.body.completed !== "boolean") {
+		if (completed !== undefined) {
+			if (typeof completed !== "boolean") {
 				return res.status(400).json({
 					success: false,
 					message: "Completed must be a boolean",
 				});
 			}
 
-			task.completed = req.body.completed;
+			task.completed = completed;
 		}
 
 		const updatedTask = await task.save();
@@ -94,13 +93,6 @@ const updateTask = async (req, res) => {
 		});
 	} catch (error) {
 		console.error("Update task error:", error);
-
-		if (error.name === "CastError" || error.name === "ValidationError") {
-			return res.status(400).json({
-				success: false,
-				message: error.message,
-			});
-		}
 
 		return res.status(500).json({
 			success: false,
