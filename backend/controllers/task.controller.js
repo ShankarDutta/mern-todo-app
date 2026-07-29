@@ -21,17 +21,17 @@ const getAllTask = async (req, res) => {
 
 const addTask = async (req, res) => {
 	try {
-		const { text } = req.body;
+		const { text } = req.body ?? {};
 
-		if (!text) {
+		if (typeof text !== "string" || text.trim() === "") {
 			return res.status(400).json({
 				success: false,
-				message: "Task text is required",
+				message: "Task is required",
 			});
 		}
 
 		const task = await Task.create({
-			text,
+			text: text.trim(),
 		});
 
 		return res.status(201).json({
@@ -42,9 +42,9 @@ const addTask = async (req, res) => {
 	} catch (err) {
 		console.error("Failed to add Task", err);
 
-		return res.status(400).json({
+		return res.status(500).json({
 			success: false,
-			message: "Failed to add task",
+			message: "Internal Server Error",
 		});
 	}
 };
@@ -61,10 +61,27 @@ const updateTask = async (req, res) => {
 		}
 
 		if (req.body.text !== undefined) {
-			task.text = req.body.text;
+			if (
+				typeof req.body.text !== "string" ||
+				req.body.text.trim() === ""
+			) {
+				return res.status(400).json({
+					success: false,
+					message: "Task text is required",
+				});
+			}
+
+			task.text = req.body.text.trim();
 		}
 
 		if (req.body.completed !== undefined) {
+			if (typeof req.body.completed !== "boolean") {
+				return res.status(400).json({
+					success: false,
+					message: "Completed must be a boolean",
+				});
+			}
+
 			task.completed = req.body.completed;
 		}
 
@@ -77,6 +94,13 @@ const updateTask = async (req, res) => {
 		});
 	} catch (error) {
 		console.error("Update task error:", error);
+
+		if (error.name === "CastError" || error.name === "ValidationError") {
+			return res.status(400).json({
+				success: false,
+				message: error.message,
+			});
+		}
 
 		return res.status(500).json({
 			success: false,
@@ -102,6 +126,13 @@ const deleteTask = async (req, res) => {
 		});
 	} catch (error) {
 		console.error("Delete task error:", error);
+
+		if (error.name === "CastError") {
+			return res.status(400).json({
+				success: false,
+				message: "Invalid task ID",
+			});
+		}
 
 		return res.status(500).json({
 			success: false,
