@@ -3,6 +3,7 @@ import { setServers } from "dns/promises";
 import dotenv from "dotenv";
 import express from "express";
 import connectDB from "./lib/db.js";
+import taskRouter from "./router/task.router.js";
 // configartion env
 dotenv.config();
 
@@ -31,13 +32,7 @@ app.use(
 	}),
 );
 
-// check server
-app.get("/", (req, res) => {
-	return res.status(200).json({
-		message: "Hello from Backend !",
-		success: true,
-	});
-});
+app.use("/api/v1/tasks", taskRouter);
 
 const startServer = async () => {
 	try {
