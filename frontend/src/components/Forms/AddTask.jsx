@@ -7,7 +7,7 @@ import { Field, FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { toast } from "../ui/toast";
 
-const AddTask = () => {
+const AddTask = ({ onTaskAdded }) => {
   const {
     handleSubmit,
     control,
@@ -30,6 +30,8 @@ const AddTask = () => {
           type: "success",
           description: res.message,
         });
+
+        onTaskAdded(res.task);
 
         reset();
       } else {

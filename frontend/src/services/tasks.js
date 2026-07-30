@@ -4,3 +4,8 @@ export const createTask = async (task) => {
   const { data } = await api.post("/", task);
   return data;
 };
+
+export const getAllTask = async () => {
+  const { data } = await api.get("/");
+  return data;
+};
