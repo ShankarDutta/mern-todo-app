@@ -62,7 +62,10 @@ const TaskCard = ({ info, onTaskDeleted }) => {
             deletedTaskId={onTaskDeleted}
           />
 
-          <EditTask />
+          <EditTask
+            taskId={info._id}
+            taskName={info.text}
+          />
         </div>
       </CardContent>
     </Card>
