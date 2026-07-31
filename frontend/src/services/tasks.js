@@ -14,3 +14,8 @@ export const delTask = async (id) => {
   const { data } = await api.delete(`/${id}`, id);
   return data;
 };
+
+export const updateTask = async (id, completed) => {
+  const { data } = await api.patch(`/${id}`, { completed });
+  return data;
+};
