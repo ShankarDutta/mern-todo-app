@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Field, FieldError } from "../ui/field";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { toast } from "../ui/toast";
 
 const AddTask = ({ onTaskAdded }) => {
@@ -55,6 +56,12 @@ const AddTask = ({ onTaskAdded }) => {
         control={control}
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
+            <Label
+              htmlFor={field.name}
+              className="sr-only">
+              Task
+            </Label>
+
             <Input
               type="text"
               {...field}

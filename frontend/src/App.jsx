@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+import { toast } from "./components/ui/toast";
 import { getAllTask } from "./services/tasks";
 
 const App = () => {
@@ -18,10 +19,20 @@ const App = () => {
       try {
         const res = await getAllTask();
 
-        if (res.success) {
-          setTasks(res.tasks);
+        if (!res.success) {
+          return toast.add({
+            type: "error",
+            description: res.message || "Failed to load tasks",
+          });
         }
+
+        setTasks(res.tasks);
       } catch (err) {
+        toast.add({
+          type: "error",
+          description: "Unable to load tasks. Please try again.",
+        });
+
         console.error("Failed to fetch tasks:", err);
       }
     };
