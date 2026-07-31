@@ -26,23 +26,27 @@ const AddTask = ({ onTaskAdded }) => {
     try {
       const res = await createTask(taskData);
 
-      if (res.success) {
-        toast.add({
-          type: "success",
-          description: res.message,
-        });
-
-        onTaskAdded(res.task);
-
-        reset();
-      } else {
-        toast.add({
+      if (!res.success) {
+        return toast.add({
           type: "error",
-          description: res.message,
+          description: "Failed to create task.",
         });
       }
+
+      toast.add({
+        type: "success",
+        description: "Task Added Successfully",
+      });
+
+      onTaskAdded(res.task);
+      reset();
     } catch (err) {
-      console.error("Failed to add task:", err);
+      toast.add({
+        type: "error",
+        description: "Unable to create task. Please try again.",
+      });
+
+      console.error("Failed to create task:", err);
     }
   };
 
