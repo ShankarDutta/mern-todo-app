@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { Field, FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/toast";
 
 const AddTask = ({ onTaskAdded }) => {
@@ -88,8 +89,11 @@ const AddTask = ({ onTaskAdded }) => {
       <Button
         className="cursor-pointer bg-blue-500 hover:bg-blue-600"
         type="submit"
-        disabled={isSubmitting}>
-        {isSubmitting ? "Adding..." : "Add"}
+        disabled={isSubmitting}
+        size="default">
+        {isSubmitting ?
+          <Spinner />
+        : "Add"}
       </Button>
     </form>
   );
