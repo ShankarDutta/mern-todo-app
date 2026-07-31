@@ -1,4 +1,5 @@
 import { addTaskSchema } from "@/lib/zodSchema";
+import { updateTaskText } from "@/services/tasks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
@@ -6,8 +7,9 @@ import { Field, FieldError } from "../ui/field";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Spinner } from "../ui/spinner";
+import { toast } from "../ui/toast";
 
-const ChangeTask = ({ id, text }) => {
+const ChangeTask = ({ id, text, onUpdateTask, onClose }) => {
   const {
     handleSubmit,
     control,
@@ -20,9 +22,31 @@ const ChangeTask = ({ id, text }) => {
     mode: "onChange",
   });
 
-  const editTodo = (taskData) => {
-    console.log(taskData);
-    console.log(id);
+  const editTodo = async (taskData) => {
+    try {
+      const res = await updateTaskText(id, taskData);
+
+      if (!res.success) {
+        return toast.add({
+          type: "error",
+          description: "Failed to edit your task",
+        });
+      }
+
+      onUpdateTask(res.task);
+      onClose();
+      return toast.add({
+        type: "success",
+        description: "Your task edited succesfully",
+      });
+    } catch (err) {
+      console.error(err);
+
+      return toast.add({
+        type: "error",
+        description: "Internal server error",
+      });
+    }
   };
 
   return (

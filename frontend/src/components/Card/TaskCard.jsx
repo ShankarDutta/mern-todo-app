@@ -6,7 +6,7 @@ import { toast } from "../ui/toast";
 import DeleteTask from "./Actions/DeleteTask";
 import EditTask from "./Actions/EditTask";
 
-const TaskCard = ({ info, onTaskDeleted }) => {
+const TaskCard = ({ info, onTaskDeleted, onTaskUpadted }) => {
   const [checked, setChecked] = useState(info.completed);
 
   const handleCompleted = async (value) => {
@@ -65,6 +65,7 @@ const TaskCard = ({ info, onTaskDeleted }) => {
           <EditTask
             taskId={info._id}
             taskName={info.text}
+            onUpdateTaskText={onTaskUpadted}
           />
         </div>
       </CardContent>

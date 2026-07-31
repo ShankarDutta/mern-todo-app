@@ -47,6 +47,11 @@ const App = () => {
     setTasks((prev) => prev.filter((task) => task._id !== id));
   };
 
+  const handleTaskUpdated = (updatedTask) => {
+    setTasks((prev) =>
+      prev.map((task) => (task._id === updatedTask._id ? updatedTask : task)),
+    );
+  };
   return (
     <section className="grid h-dvh place-items-center px-4">
       <Card className="max-w-lg gap-3 md:w-full">
@@ -65,6 +70,7 @@ const App = () => {
                 key={task._id}
                 info={task}
                 onTaskDeleted={handleTaskDeleted}
+                onTaskUpadted={handleTaskUpdated}
               />
             );
           })}
