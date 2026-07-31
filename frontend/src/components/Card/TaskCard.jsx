@@ -4,7 +4,7 @@ import { Checkbox } from "../ui/checkbox";
 import DeleteTask from "./Actions/DeleteTask";
 import EditTask from "./Actions/EditTask";
 
-const TaskCard = ({ info }) => {
+const TaskCard = ({ info, onTaskDeleted }) => {
   const [checked, setChecked] = useState(false);
 
   return (
@@ -22,7 +22,10 @@ const TaskCard = ({ info }) => {
         </div>
 
         <div className="space-x-2">
-          <DeleteTask />
+          <DeleteTask
+            id={info._id}
+            deletedTaskId={onTaskDeleted}
+          />
 
           <EditTask />
         </div>

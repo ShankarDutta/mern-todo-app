@@ -36,13 +36,17 @@ const App = () => {
         console.error("Failed to fetch tasks:", err);
       }
     };
-
     fetchTasks();
   }, []);
 
   const handleTaskAdded = (newTask) => {
     setTasks((prev) => [newTask, ...prev]);
   };
+
+  const handleTaskDeleted = (id) => {
+    setTasks((prev) => prev.filter((task) => task._id !== id));
+  };
+
   return (
     <section className="grid h-dvh place-items-center px-4">
       <Card className="max-w-lg gap-3 md:w-full">
@@ -60,6 +64,7 @@ const App = () => {
               <TaskCard
                 key={task._id}
                 info={task}
+                onTaskDeleted={handleTaskDeleted}
               />
             );
           })}
