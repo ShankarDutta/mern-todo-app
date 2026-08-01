@@ -1,5 +1,5 @@
 import { addTaskSchema } from "@/lib/zodSchema";
-import { createTask } from "@/services/tasks";
+import { updateTaskText } from "@/services/tasks";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Button } from "../ui/button";
@@ -9,52 +9,50 @@ import { Label } from "../ui/label";
 import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/toast";
 
-const AddTask = ({ onTaskAdded }) => {
+const ChangeTask = ({ id, text, onUpdateTask, onClose }) => {
   const {
     handleSubmit,
     control,
-    reset,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = useForm({
     resolver: zodResolver(addTaskSchema),
     defaultValues: {
-      text: "",
+      text,
     },
-    mode: "all",
+    mode: "onChange",
   });
 
-  const addTodo = async (taskData) => {
+  const editTodo = async (taskData) => {
     try {
-      const res = await createTask(taskData);
+      const res = await updateTaskText(id, taskData);
 
       if (!res.success) {
         return toast.add({
           type: "error",
-          description: "Failed to create task.",
+          description: "Failed to edit your task",
         });
       }
 
-      toast.add({
+      onUpdateTask(res.task);
+      onClose();
+      return toast.add({
         type: "success",
-        description: "Task Added Successfully",
+        description: "Your task edited succesfully",
       });
-
-      onTaskAdded(res.task);
-      reset();
     } catch (err) {
-      toast.add({
-        type: "error",
-        description: "Unable to create task. Please try again.",
-      });
+      console.error(err);
 
-      console.error("Failed to create task:", err);
+      return toast.add({
+        type: "error",
+        description: "Internal server error",
+      });
     }
   };
 
   return (
     <form
       className="flex items-start gap-2"
-      onSubmit={handleSubmit(addTodo)}
+      onSubmit={handleSubmit(editTodo)}
       noValidate>
       <Controller
         name="text"
@@ -64,7 +62,7 @@ const AddTask = ({ onTaskAdded }) => {
             <Label
               htmlFor={field.name}
               className="sr-only">
-              Task
+              Edit Task
             </Label>
 
             <Input
@@ -89,7 +87,7 @@ const AddTask = ({ onTaskAdded }) => {
       <Button
         className="cursor-pointer bg-blue-500 hover:bg-blue-600"
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || !isDirty}
         size="default">
         {isSubmitting ?
           <Spinner />
@@ -99,4 +97,4 @@ const AddTask = ({ onTaskAdded }) => {
   );
 };
 
-export default AddTask;
+export default ChangeTask;
