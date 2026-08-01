@@ -4,7 +4,9 @@
 	"description": "A simple full-stack **MERN Todo Application** built to learn CRUD operations and understand how a **Monorepo** works.",
 	"main": "index.js",
 	"scripts": {
-		"dev": "nodemon backend/server.js"
+		"dev": "nodemon backend/server.js",
+		"build": "npm install && npm install --prefix frontend && npm run build --prefix frontend",
+		"start": "node backend/server.js"
 	},
 	"repository": {
 		"type": "git",
