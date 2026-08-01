@@ -2,8 +2,10 @@ import cors from "cors";
 import { setServers } from "dns/promises";
 import dotenv from "dotenv";
 import express from "express";
+import path from "path";
 import connectDB from "./lib/db.js";
 import taskRouter from "./router/task.router.js";
+
 // configartion env
 dotenv.config();
 
@@ -16,7 +18,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // declare port
-const port = process.env.PORT;
+const port = process.env.PORT || 4000;
 
 // Parse incoming JSON requests (max payload: 10 MB)
 app.use(express.json({ limit: "10mb" }));
@@ -33,6 +35,15 @@ app.use(
 );
 
 app.use("/api/v1/tasks", taskRouter);
+
+const _dirName = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+	app.use(express.static(path.join(_dirName, "/frontend/dist")));
+	app.get("*splat", (req, res) => {
+		res.sendFile(path.resolve(_dirName, "frontend", "dist", "index.html"));
+	});
+}
 
 const startServer = async () => {
 	try {
