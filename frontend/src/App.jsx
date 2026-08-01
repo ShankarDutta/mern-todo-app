@@ -52,9 +52,10 @@ const App = () => {
       prev.map((task) => (task._id === updatedTask._id ? updatedTask : task)),
     );
   };
+
   return (
-    <section className="grid h-dvh place-items-center px-4">
-      <Card className="max-w-lg gap-3 md:w-full">
+    <section className="flex justify-center">
+      <Card className="mt-52 max-w-lg gap-3 md:w-full">
         <CardHeader>
           <CardTitle>Task Manager</CardTitle>
           <CardDescription>
@@ -64,16 +65,23 @@ const App = () => {
         <CardContent className="space-y-4">
           <AddTask onTaskAdded={handleTaskAdded} />
 
-          {tasks.map((task) => {
-            return (
-              <TaskCard
-                key={task._id}
-                info={task}
-                onTaskDeleted={handleTaskDeleted}
-                onTaskUpadted={handleTaskUpdated}
-              />
-            );
-          })}
+          {tasks.length < 1 ?
+            <Card>
+              <CardContent>
+                <CardTitle>Add Your First Task</CardTitle>
+              </CardContent>
+            </Card>
+          : tasks.map((task) => {
+              return (
+                <TaskCard
+                  key={task._id}
+                  info={task}
+                  onTaskDeleted={handleTaskDeleted}
+                  onTaskUpadted={handleTaskUpdated}
+                />
+              );
+            })
+          }
         </CardContent>
       </Card>
     </section>
